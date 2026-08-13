@@ -1,0 +1,16 @@
+{
+  "name": "cnn-live-chat",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Shared Christopher + Nikki + AI chat for Netlify",
+  "scripts": {
+    "build": "node -e \"console.log('Static site ready')\""
+  },
+  "dependencies": {
+    "@netlify/blobs": "latest",
+    "@netlify/functions": "latest"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

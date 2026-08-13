@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101114" />
+  <title>Our Chat</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c0d10;
+      --panel: #15171c;
+      --panel-2: #1c1f26;
+      --line: #2a2e37;
+      --text: #f5f6f8;
+      --muted: #a8adb8;
+      --mine: #2d5bff;
+      --theirs: #252932;
+      --ai: #5636b8;
+      --good: #4cd38a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { display: flex; justify-content: center; }
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app { width: min(100%, 860px); height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; background: var(--panel); }
+    header {
+      padding: max(14px, env(safe-area-inset-top)) 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(21,23,28,.96);
+      backdrop-filter: blur(12px);
+    }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .title { font-weight: 750; font-size: 18px; }
+    .subtitle { margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .status { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--good); box-shadow: 0 0 12px rgba(76,211,138,.55); }
+    #messages {
+      overflow-y: auto;
+      padding: 18px 14px 26px;
+      scroll-behavior: smooth;
+    }
+    .day-note { text-align: center; color: var(--muted); font-size: 12px; margin: 6px 0 18px; }
+    .row { display: flex; margin: 8px 0; }
+    .row.mine { justify-content: flex-end; }
+    .bubble {
+      max-width: min(82%, 620px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 9px 12px 8px;
+      background: var(--theirs);
+      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+    }
+    .mine .bubble { background: var(--mine); border-color: transparent; }
+    .ai .bubble { background: var(--ai); border-color: transparent; }
+    .who { font-size: 11px; font-weight: 750; opacity: .8; margin-bottom: 3px; }
+    .body { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.35; }
+    .time { font-size: 10px; opacity: .65; margin-top: 5px; text-align: right; }
+    .composer {
+      border-top: 1px solid var(--line);
+      padding: 10px 10px max(10px, env(safe-area-inset-bottom));
+      background: rgba(21,23,28,.98);
+    }
+    #typing { min-height: 18px; padding: 0 4px 4px; font-size: 12px; color: var(--muted); }
+    .compose-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; }
+    textarea {
+      resize: none;
+      width: 100%;
+      max-height: 160px;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 11px 13px;
+      outline: none;
+    }
+    textarea:focus { border-color: #596170; }
+    .send {
+      width: 48px; height: 44px; border: 0; border-radius: 15px;
+      background: var(--mine); color: white; font-weight: 800;
+    }
+    .send:disabled { opacity: .45; cursor: default; }
+    .hint { font-size: 11px; color: var(--muted); padding: 6px 4px 0; }
+    .identity {
+      position: fixed; inset: 0; z-index: 10; display: grid; place-items: center;
+      background: rgba(0,0,0,.72); backdrop-filter: blur(8px); padding: 20px;
+    }
+    .card { width: min(100%, 400px); background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: 0 25px 80px rgba(0,0,0,.45); }
+    .card h1 { font-size: 22px; margin: 0 0 6px; }
+    .card p { color: var(--muted); margin: 0 0 18px; line-height: 1.4; }
+    .choices { display: grid; gap: 9px; }
+    .choice { border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 15px; padding: 13px; text-align: left; font-weight: 700; }
+    .choice:hover { border-color: #596170; }
+    .hidden { display: none !important; }
+    .error { color: #ff9e9e; }
+    @media (min-width: 861px) {
+      body { padding: 18px 0; }
+      .app { height: calc(100dvh - 36px); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="top">
+      <div>
+        <div class="title">Our Chat</div>
+        <div class="subtitle" id="roomLabel">Christopher • Nikki • AI</div>
+      </div>
+      <div class="status"><span class="dot"></span><span id="connection">Connecting…</span></div>
+    </div>
+  </header>
+
+  <main id="messages">
+    <div class="day-note">Messages in this invite room appear for everyone who has the room link.</div>
+  </main>
+
+  <footer class="composer">
+    <div id="typing"></div>
+    <div class="compose-row">
+      <textarea id="input" rows="1" placeholder="Message Nikki…  Use @AI when you want the AI."></textarea>
+      <button id="send" class="send" aria-label="Send">↑</button>
+    </div>
+    <div class="hint">Enter sends • Shift+Enter adds a line • Type <b>@AI</b> to invite the AI into the conversation.</div>
+  </footer>
+</div>
+
+<div id="identity" class="identity">
+  <div class="card">
+    <h1>Who are you?</h1>
+    <p>This only labels your messages in this room.</p>
+    <div class="choices">
+      <button class="choice" data-name="Christopher">Christopher</button>
+      <button class="choice" data-name="Nikki">Nikki</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const messagesEl = $("messages");
+  const input = $("input");
+  const sendBtn = $("send");
+  const typingEl = $("typing");
+  const connectionEl = $("connection");
+  const identityEl = $("identity");
+
+  const params = new URLSearchParams(location.search);
+  let room = params.get("room");
+  if (!room || !/^[A-Za-z0-9_-]{12,64}$/.test(room)) {
+    const bytes = new Uint8Array(18);
+    crypto.getRandomValues(bytes);
+    room = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+    params.set("room", room);
+    history.replaceState({}, "", `${location.pathname}?${params.toString()}`);
+  }
+
+  let me = localStorage.getItem(`identity:${room}`) || "";
+  if (me) identityEl.classList.add("hidden");
+
+  document.querySelectorAll(".choice").forEach(btn => {
+    btn.addEventListener("click", () => {
+      me = btn.dataset.name;
+      localStorage.setItem(`identity:${room}`, me);
+      identityEl.classList.add("hidden");
+      input.focus();
+      postPresence(false);
+    });
+  });
+
+  let lastSignature = "";
+  let lastTypingSent = 0;
+  let aiBusy = false;
+  let stickToBottom = true;
+
+  function fmtTime(iso) {
+    try { return new Intl.DateTimeFormat([], { hour: "numeric", minute: "2-digit" }).format(new Date(iso)); }
+    catch { return ""; }
+  }
+
+  function renderMessages(items) {
+    const signature = items.map(m => m.id).join("|");
+    if (signature === lastSignature) return;
+    lastSignature = signature;
+
+    const nearBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 120;
+    messagesEl.querySelectorAll(".row").forEach(el => el.remove());
+
+    for (const m of items) {
+      const row = document.createElement("div");
+      row.className = "row";
+      if (m.user === me) row.classList.add("mine");
+      if (m.role === "ai") row.classList.add("ai");
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+
+      const who = document.createElement("div");
+      who.className = "who";
+      who.textContent = m.role === "ai" ? "AI" : m.user;
+
+      const body = document.createElement("div");
+      body.className = "body";
+      body.textContent = m.text;
+
+      const time = document.createElement("div");
+      time.className = "time";
+      time.textContent = fmtTime(m.createdAt);
+
+      bubble.append(who, body, time);
+      row.appendChild(bubble);
+      messagesEl.appendChild(row);
+    }
+    if (nearBottom || stickToBottom) {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      stickToBottom = false;
+    }
+  }
+
+  async function fetchMessages() {
+    try {
+      const r = await fetch(`/api/messages?room=${encodeURIComponent(room)}`, { cache: "no-store" });
+      if (!r.ok) throw new Error("sync");
+      const data = await r.json();
+      renderMessages(data.messages || []);
+      connectionEl.textContent = "Live";
+    } catch {
+      connectionEl.textContent = "Reconnecting…";
+    }
+  }
+
+  async function fetchPresence() {
+    if (!me) return;
+    try {
+      const r = await fetch(`/api/presence?room=${encodeURIComponent(room)}`, { cache: "no-store" });
+      if (!r.ok) return;
+      const data = await r.json();
+      const others = (data.people || []).filter(p => p.user !== me && p.typing);
+      typingEl.textContent = others.length ? `${others.map(o => o.user).join(" & ")} ${others.length > 1 ? "are" : "is"} typing…` : (aiBusy ? "AI is thinking…" : "");
+    } catch {}
+  }
+
+  async function postPresence(typing) {
+    if (!me) return;
+    try {
+      await fetch("/api/presence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ room, user: me, typing })
+      });
+    } catch {}
+  }
+
+  async function askAI(text) {
+    aiBusy = true;
+    typingEl.textContent = "AI is thinking…";
+    try {
+      const r = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ room, user: me, text })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const msg = data.error || "The AI could not answer.";
+        alert(msg);
+      }
+    } catch {
+      alert("The AI endpoint could not be reached.");
+    } finally {
+      aiBusy = false;
+      await fetchMessages();
+      await fetchPresence();
+    }
+  }
+
+  async function send() {
+    const text = input.value.trim();
+    if (!text || !me) return;
+
+    sendBtn.disabled = true;
+    input.value = "";
+    resize();
+    postPresence(false);
+    stickToBottom = true;
+
+    try {
+      const r = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ room, user: me, text })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || "Message failed");
+      await fetchMessages();
+
+      if (/(^|\s)@ai\b/i.test(text)) {
+        askAI(text);
+      }
+    } catch (e) {
+      input.value = text;
+      resize();
+      alert(e.message || "Message could not be sent.");
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  function resize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(160, input.scrollHeight) + "px";
+  }
+
+  input.addEventListener("input", () => {
+    resize();
+    const now = Date.now();
+    if (now - lastTypingSent > 700) {
+      lastTypingSent = now;
+      postPresence(input.value.length > 0);
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  input.addEventListener("blur", () => postPresence(false));
+  sendBtn.addEventListener("click", send);
+  messagesEl.addEventListener("scroll", () => {
+    stickToBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 80;
+  });
+
+  fetchMessages();
+  fetchPresence();
+  setInterval(fetchMessages, 1000);
+  setInterval(fetchPresence, 1000);
+  setInterval(() => { if (me) postPresence(input.value.length > 0); }, 4000);
+})();
+</script>
+</body>
+</html>
