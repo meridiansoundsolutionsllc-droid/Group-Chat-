@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-3MV25DMP1K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3MV25DMP1K');
+</script>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Request your complimentary consultation with Meridian Solutions." name="description"/><title>Request a Consultation | Meridian Solutions</title><meta content="8.0" name="meridian-version"/>
+<link href="meridian-site.css" rel="stylesheet"/></head>
+<body><header class="site-header"><div class="header-inner"><a class="brand" href="index.html"><span>MERIDIAN SOLUTIONS</span><img alt="" aria-hidden="true" src="meridian-emblem.png"/></a><nav aria-label="Primary navigation" class="nav-links"><a href="about.html">About</a><a href="learning-environments.html">Learning Environments</a><a aria-current="page" href="getting-started.html"><span class="nav-label-full">Schedule Consultation</span><span class="nav-label-mobile">Consultation</span></a></nav></div></header><main><section class="page-hero"><h1>Contact Meridian</h1></section><section class="content"><form action="schedule-consultation.html" class="form" data-netlify="true" data-netlify-honeypot="bot-field" id="consultation-form" method="POST" name="consultation-request"><input name="form-name" type="hidden" value="consultation-request"/><p hidden=""><label>Do not fill this out: <input name="bot-field"/></label></p>
+<div class="form-grid">
+<div class="field full"><label for="name">Name</label><input autocomplete="name" id="name" name="name" required=""/></div>
+<div class="field"><label for="email">Email</label><input autocomplete="email" id="email" name="email" required="" type="email"/></div>
+<div class="field"><label for="phone">Phone</label><input autocomplete="tel" id="phone" name="phone" type="tel"/></div>
+<fieldset class="field full interest-fieldset">
+<legend class="legend">Learning Environment(s)</legend><p class="form-note selection-qualifier">Choose as many as apply.</p>
+<div class="interest-options">
+<label class="interest-card"><input name="interest" type="checkbox" value="Audio Production"/><span>Audio Production</span></label>
+<label class="interest-card"><input name="interest" type="checkbox" value="DJ Performance &amp; Curation"/><span>DJ Performance &amp; Curation</span></label>
+<label class="interest-card"><input name="interest" type="checkbox" value="Media Production &amp; Content Strategies"/><span>Media Production &amp; Content Strategies</span></label>
+<label class="interest-card"><input name="interest" type="checkbox" value="Digital Literacy &amp; Online Safety"/><span>Digital Literacy &amp; Online Safety</span></label>
+<label class="interest-card"><input name="interest" type="checkbox" value="Life Skills Essentials"/><span>Life Skills Essentials</span></label>
+</div>
+</fieldset>
+<div class="field full"><label for="goals">Goals or Additional Information <span class="qualifier">(optional)</span></label><textarea id="goals" name="goals"></textarea></div>
+</div>
+<fieldset class="interest-fieldset request-type-fieldset"><legend class="legend">What would you like to do?</legend><p class="form-note selection-qualifier">Choose as many as apply.</p><div class="interest-options request-type-options"><label class="interest-card"><input name="request_type" type="checkbox" value="more_information"/><span>More Information</span></label><p class="form-note">Select More Information to receive an email containing the Getting Started Guide, in addition to other pertinent information about the program.</p><label class="interest-card"><input name="request_type" type="checkbox" value="schedule_consultation"/><span>Schedule Consultation</span></label><p class="form-note">Select Schedule Consultation to continue to Meridian Solutions’ scheduling calendar, where you can choose a date and time for your complimentary 15-minute Zoom consultation.</p></div></fieldset><div class="form-actions"><button class="btn" type="submit">Submit</button></div></form></section></main><footer>© 2026 Meridian Sound Solutions LLC. All rights reserved.</footer><script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('consultation-form');
+  const params = new URLSearchParams(window.location.search);
+
+  // Learning Environment preselection from card links.
+  const selectedInterest = params.get('interest');
+  const interestInputs = Array.from(document.querySelectorAll('input[name="interest"]'));
+  if (selectedInterest) {
+    interestInputs.forEach(input => { input.checked = false; });
+    const match = interestInputs.find(input => input.value === selectedInterest);
+    if (match) match.checked = true;
+  }
+
+  // Request-type preselection from bottom-page buttons.
+  const selectedAction = params.get('action');
+  const requestInputs = Array.from(document.querySelectorAll('input[name="request_type"]'));
+  if (selectedAction) {
+    const match = requestInputs.find(input => input.value === selectedAction);
+    if (match) match.checked = true;
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const selectedRequestTypes = requestInputs
+      .filter(input => input.checked)
+      .map(input => input.value);
+
+    if (selectedRequestTypes.length === 0) {
+      window.alert('Please select More Information, Schedule Consultation, or both.');
+      return;
+    }
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalLabel = submitButton?.textContent || 'Submit';
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Saving your request…';
+    }
+
+    const formData = new FormData(form);
+    const encoded = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      encoded.append(key, String(value));
+    }
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: encoded.toString()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Netlify form submission failed with status ${response.status}`);
+      }
+
+      const wantsMoreInfo = selectedRequestTypes.includes('more_information');
+      const wantsConsult = selectedRequestTypes.includes('schedule_consultation');
+
+      if (wantsConsult) {
+        sessionStorage.setItem('meridianConsultationPrefill', JSON.stringify({
+          name: String(formData.get('name') || ''),
+          email: String(formData.get('email') || '')
+        }));
+
+        // If both are selected, record the information request before continuing to scheduling.
+        if (wantsMoreInfo) {
+          sessionStorage.setItem('meridianMoreInformationRequested', 'true');
+        } else {
+          sessionStorage.removeItem('meridianMoreInformationRequested');
+        }
+
+        window.location.assign('schedule-consultation.html');
+      } else {
+        window.location.assign('more-information-thank-you.html');
+      }
+    } catch (error) {
+      console.error(error);
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalLabel;
+      }
+      window.alert('Your request could not be saved. Please check your connection and try again.');
+    }
+  });
+});
+</script></body></html>

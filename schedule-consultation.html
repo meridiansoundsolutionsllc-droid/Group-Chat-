@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-3MV25DMP1K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3MV25DMP1K');
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Schedule your complimentary 15-minute Zoom consultation with Meridian Solutions." name="description"/>
+<title>Schedule Your Consultation | Meridian Solutions</title>
+<meta content="8.2" name="meridian-version"/>
+<link href="meridian-site.css" rel="stylesheet"/></head>
+<body><header class="site-header"><div class="header-inner"><a class="brand" href="index.html"><span>MERIDIAN SOLUTIONS</span><img alt="" aria-hidden="true" src="meridian-emblem.png"/></a><nav aria-label="Primary navigation" class="nav-links"><a href="about.html">About</a><a href="learning-environments.html">Learning Environments</a><a aria-current="page" href="getting-started.html"><span class="nav-label-full">Schedule Consultation</span><span class="nav-label-mobile">Consultation</span></a></nav></div></header>
+<main class="schedule-main">
+<section aria-labelledby="schedule-title" class="schedule-intro">
+<h1 id="schedule-title">Schedule Your Complimentary 15-Minute Zoom Consultation Here</h1>
+<p class="instruction">Please wait while your request is processed and the calendar loads so you can choose a date and time for your complimentary 15-minute Zoom consultation.</p>
+<p>Your Zoom meeting link will be included in your confirmation email after your consultation is scheduled.</p>
+</section>
+<section aria-label="Consultation scheduling calendar" class="cal-shell">
+<div id="my-cal-inline-meridian-initial-consultation"></div>
+</section>
+</main>
+<footer>© 2026 Meridian Sound Solutions LLC. All rights reserved.</footer>
+<script type="text/javascript">
+(function (C, A, L) {
+  let p = function (a, ar) { a.q.push(ar); };
+  let d = C.document;
+  C.Cal = C.Cal || function () {
+    let cal = C.Cal;
+    let ar = arguments;
+    if (!cal.loaded) {
+      cal.ns = {};
+      cal.q = cal.q || [];
+      d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true;
+    }
+    if (ar[0] === L) {
+      const api = function () { p(api, arguments); };
+      const namespace = ar[1];
+      api.q = api.q || [];
+      if (typeof namespace === "string") {
+        cal.ns[namespace] = cal.ns[namespace] || api;
+        p(cal.ns[namespace], ar);
+        p(cal, ["initNamespace", namespace]);
+      } else {
+        p(cal, ar);
+      }
+      return;
+    }
+    p(cal, ar);
+  };
+})(window, "https://app.cal.com/embed/embed.js", "init");
+
+Cal("init", "meridian-initial-consultation", {origin:"https://app.cal.com"});
+Cal.config = Cal.config || {};
+Cal.config.forwardQueryParams = true;
+
+let prefill = {name:"", email:""};
+try {
+  const stored = sessionStorage.getItem('meridianConsultationPrefill');
+  if (stored) prefill = Object.assign(prefill, JSON.parse(stored));
+} catch (error) {
+  console.warn('Consultation prefill was unavailable.', error);
+}
+
+const bookingConfig = {
+  layout:"month_view",
+  useSlotsViewOnSmallScreen:"true",
+  theme:"light"
+};
+if (prefill.name) bookingConfig.name = prefill.name;
+if (prefill.email) bookingConfig.email = prefill.email;
+
+Cal.ns["meridian-initial-consultation"]("inline", {
+  elementOrSelector:"#my-cal-inline-meridian-initial-consultation",
+  config: bookingConfig,
+  calLink:"meridian-sound-solutions-llc-cvvlnc/meridian-initial-consultation"
+});
+
+Cal.ns["meridian-initial-consultation"]("ui", {
+  theme:"light",
+  hideEventTypeDetails:false,
+  layout:"month_view"
+});
+
+Cal.ns["meridian-initial-consultation"]("on", {
+  action:"bookingSuccessfulV2",
+  callback: function () {
+    try {
+      sessionStorage.removeItem("meridianConsultationPrefill");
+    } catch (error) {
+      console.warn("Consultation prefill could not be cleared.", error);
+    }
+    window.location.assign("thank-you.html");
+  }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('meridianMoreInformationRequested') === 'true') {
+    document.body.dataset.moreInformationRequested = 'true';
+  }
+});
+</script></body>
+</html>

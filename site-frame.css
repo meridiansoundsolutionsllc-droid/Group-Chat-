@@ -1,0 +1,607 @@
+:root{
+  --meridian-frame:1180px;
+  --meridian-gutter:32px;
+}
+
+/* One horizontal frame for the header and primary page content. */
+body .site-header .header-inner{
+  width:min(var(--meridian-frame), calc(100% - (2 * var(--meridian-gutter)))) !important;
+  max-width:var(--meridian-frame) !important;
+  margin-inline:auto !important;
+  padding-inline:0 !important;
+}
+
+body .page-header{
+  padding-inline:max(var(--meridian-gutter), calc((100% - var(--meridian-frame)) / 2)) !important;
+}
+
+body .page-hero,
+body .content,
+body .container{
+  width:min(var(--meridian-frame), calc(100% - (2 * var(--meridian-gutter)))) !important;
+  max-width:var(--meridian-frame) !important;
+  margin-inline:auto !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+
+/* Cards and their images now use the full shared frame. */
+body .environment-grid{
+  /* The grid already sits inside the shared content frame. Using another
+     gutter calculation here double-inset the cards on narrow screens. */
+  width:100% !important;
+  max-width:none !important;
+  margin-inline:auto !important;
+  gap:28px !important;
+}
+
+body .environment-image{width:100% !important}
+
+/* The home image and copy follow the same margins as every page header. */
+body .hero-media-wrap,
+body .hero-copy{
+  width:min(var(--meridian-frame), calc(100% - (2 * var(--meridian-gutter)))) !important;
+  max-width:var(--meridian-frame) !important;
+}
+
+body .hero-copy{
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+
+@media (max-width:1050px){
+  :root{--meridian-gutter:24px}
+  body .environment-grid{gap:24px !important}
+}
+
+@media (max-width:700px){
+  :root{--meridian-gutter:16px}
+  /* The homepage owns an inner header frame; prevent the outer sticky header
+     from adding a second portrait gutter. */
+  body .site-header{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  body .site-header .header-inner{
+    width:calc(100% - (2 * var(--meridian-gutter))) !important;
+    max-width:none !important;
+    margin-inline:auto !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  body .page-header{padding-inline:var(--meridian-gutter) !important}
+  body .environment-grid{
+    width:100% !important;
+    max-width:none !important;
+    gap:20px !important;
+  }
+}
+
+/* August 2, 2026 — interior pages use the homepage header exactly. */
+html body header.site-header{
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+}
+
+html body header.site-header > .header-inner{
+  width:min(var(--meridian-frame), calc(100% - (2 * var(--meridian-gutter)))) !important;
+  max-width:var(--meridian-frame) !important;
+  min-height:0 !important;
+  margin-inline:auto !important;
+  padding:18px 0 !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:28px !important;
+}
+
+/* Slightly stronger card titles without changing their size. */
+html body .environment-card-body h2,
+html body .environment-title-link{
+  font-weight:650 !important;
+}
+
+/* The Life Skills image is naturally brighter than the photography set. */
+html body .life-skills-card .environment-image{
+  filter:brightness(.94) contrast(1.02) saturate(.92) !important;
+}
+
+@media (max-width:960px){
+  html body header.site-header > .header-inner{
+    padding:18px 0 !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:14px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-width:960px){
+  html body header.site-header > .header-inner{
+    padding:14px 0 !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    gap:1rem !important;
+  }
+}
+
+@media (max-width:700px){
+  html body header.site-header > .header-inner{
+    width:calc(100% - 32px) !important;
+    margin-inline:auto !important;
+    padding:16px 0 !important;
+  }
+}
+
+/* Portrait alignment correction. These deliberately specific selectors
+   override the older page-level responsive rules that load after this file. */
+html body .content > .environment-grid,
+html body main .environment-grid{
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+@media (max-width:700px){
+  html body header.site-header{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+
+  html body header.site-header > .header-inner,
+  html body header.page-header{
+    width:calc(100% - 32px) !important;
+    max-width:none !important;
+    margin-inline:auto !important;
+    padding:16px 0 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:14px !important;
+  }
+
+  html body header.site-header .nav-links,
+  html body header.page-header .nav-links{
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,.62fr) minmax(0,1.75fr) minmax(0,1fr) !important;
+    gap:6px !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  html body main .content,
+  html body main .container,
+  html body main .page-hero{
+    width:calc(100% - 32px) !important;
+    max-width:none !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+
+  html body .content > .environment-grid,
+  html body main .environment-grid{
+    width:100% !important;
+    max-width:none !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* August 2, 2026 — cards sit just inside the navigation frame and separate
+   gently from the white page without losing the site's square minimalism. */
+html body main .content > .environment-grid,
+html body main .environment-grid{
+  width:calc(100% - 24px) !important;
+  max-width:calc(var(--meridian-frame) - 24px) !important;
+  margin-inline:auto !important;
+}
+
+html body .environment-card{
+  border-color:#d3d3d3 !important;
+  box-shadow:0 3px 14px rgba(24, 24, 24, .065) !important;
+}
+
+@media (max-width:700px){
+  html body main .content > .environment-grid,
+  html body main .environment-grid{
+    width:calc(100% - 12px) !important;
+    max-width:none !important;
+    margin-inline:auto !important;
+  }
+}
+
+
+/* August 4, 2026 — explicit Home link and interactive brand treatment. */
+html body .site-header .brand,
+html body .page-header .brand{
+  cursor:pointer !important;
+  transition:transform .18s ease, filter .18s ease !important;
+  transform:translateY(0) !important;
+  transform-origin:left center !important;
+}
+
+html body .site-header .brand:hover,
+html body .site-header .brand:focus-visible,
+html body .page-header .brand:hover,
+html body .page-header .brand:focus-visible{
+  transform:translateY(-3px) !important;
+  filter:drop-shadow(0 5px 6px rgba(0,0,0,.12)) !important;
+}
+
+html body .site-header .brand:active,
+html body .page-header .brand:active{
+  transform:translateY(-1px) !important;
+}
+
+@media (max-width:700px){
+  html body header.site-header .nav-links,
+  html body header.page-header .nav-links{
+    display:grid !important;
+    grid-template-columns:auto auto minmax(0,1.55fr) auto !important;
+    align-items:center !important;
+    gap:4px !important;
+    width:100% !important;
+  }
+
+  html body header.site-header .nav-links a,
+  html body header.page-header .nav-links a{
+    min-width:0 !important;
+    padding:6px 2px !important;
+    margin:0 !important;
+    font-size:clamp(.66rem, 2.65vw, .78rem) !important;
+    letter-spacing:-.02em !important;
+    line-height:1.05 !important;
+    white-space:nowrap !important;
+    text-align:center !important;
+  }
+}
+
+@media (max-width:390px){
+  html body header.site-header .nav-links,
+  html body header.page-header .nav-links{
+    gap:2px !important;
+  }
+
+  html body header.site-header .nav-links a,
+  html body header.page-header .nav-links a{
+    padding-inline:1px !important;
+    font-size:clamp(.61rem, 2.55vw, .7rem) !important;
+  }
+}
+
+
+/* August 4, 2026 — consistent interactive lift for primary navigation links. */
+html body .site-header .nav-links a,
+html body .page-header .nav-links a{
+  cursor:pointer !important;
+  transition:transform .18s ease, filter .18s ease, border-color .18s ease !important;
+  transform:translateY(0) !important;
+}
+
+html body .site-header .nav-links a:hover,
+html body .site-header .nav-links a:focus-visible,
+html body .page-header .nav-links a:hover,
+html body .page-header .nav-links a:focus-visible{
+  transform:translateY(-3px) !important;
+  filter:drop-shadow(0 5px 6px rgba(0,0,0,.12)) !important;
+}
+
+html body .site-header .nav-links a:active,
+html body .page-header .nav-links a:active{
+  transform:translateY(-1px) !important;
+}
+
+
+/* August 4, 2026 — complete-card anchor landing and shared interactive lift. */
+html body .environment-card[id]{
+  scroll-margin-top:140px !important;
+}
+
+html body .environment-button,
+html body a.btn[href="learning-environments.html"],
+html body .hero-link{
+  cursor:pointer !important;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease !important;
+  transform:translateY(0) !important;
+}
+
+html body .environment-button:hover,
+html body .environment-button:focus-visible,
+html body a.btn[href="learning-environments.html"]:hover,
+html body a.btn[href="learning-environments.html"]:focus-visible,
+html body .hero-link:hover,
+html body .hero-link:focus-visible{
+  transform:translateY(-3px) !important;
+  box-shadow:0 8px 18px rgba(0,0,0,.12) !important;
+}
+
+html body .environment-button:active,
+html body a.btn[href="learning-environments.html"]:active,
+html body .hero-link:active{
+  transform:translateY(-1px) !important;
+}
+
+html body .hero-link{
+  display:block !important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  html body .environment-button,
+  html body a.btn[href="learning-environments.html"],
+  html body .hero-link{
+    transition:none !important;
+  }
+}
+
+
+/* August 4, 2026 — Version 40 navigation and interaction refinements. */
+@media (max-width:700px){
+  html body header.site-header .nav-links,
+  html body header.page-header .nav-links{
+    display:grid !important;
+    grid-template-columns:minmax(0,.72fr) minmax(0,1.9fr) minmax(0,1fr) !important;
+    align-items:center !important;
+    gap:6px !important;
+    width:100% !important;
+  }
+
+  html body header.site-header .nav-links a,
+  html body header.page-header .nav-links a{
+    padding:7px 2px !important;
+    font-size:clamp(.72rem, 2.85vw, .88rem) !important;
+    letter-spacing:-.015em !important;
+    line-height:1.08 !important;
+    white-space:nowrap !important;
+  }
+}
+
+/* Ensure both the homepage CTA and its linked hero receive the intended lift. */
+html body a.btn.btn-primary[href="learning-environments.html"],
+html body a[data-page-link="learning"][href="learning-environments.html"],
+html body .hero-link{
+  cursor:pointer !important;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease !important;
+  transform:translateY(0) !important;
+}
+
+html body a.btn.btn-primary[href="learning-environments.html"]:hover,
+html body a.btn.btn-primary[href="learning-environments.html"]:focus-visible,
+html body a[data-page-link="learning"][href="learning-environments.html"]:hover,
+html body a[data-page-link="learning"][href="learning-environments.html"]:focus-visible,
+html body .hero-link:hover,
+html body .hero-link:focus-visible{
+  transform:translateY(-3px) !important;
+  box-shadow:0 8px 18px rgba(0,0,0,.12) !important;
+}
+
+html body a.btn.btn-primary[href="learning-environments.html"]:active,
+html body a[data-page-link="learning"][href="learning-environments.html"]:active,
+html body .hero-link:active{
+  transform:translateY(-1px) !important;
+}
+
+/* The consultation submit button lifts only when actionable. Disabled/greyed
+   states remain stationary so the interface still communicates inactivity. */
+html body .form-actions button.btn:not(:disabled){
+  cursor:pointer !important;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease !important;
+  transform:translateY(0) !important;
+}
+
+html body .form-actions button.btn:not(:disabled):hover,
+html body .form-actions button.btn:not(:disabled):focus-visible{
+  transform:translateY(-3px) !important;
+  box-shadow:0 8px 18px rgba(0,0,0,.12) !important;
+}
+
+html body .form-actions button.btn:not(:disabled):active{
+  transform:translateY(-1px) !important;
+}
+
+html body .form-actions button.btn:disabled{
+  cursor:not-allowed !important;
+  transform:none !important;
+  box-shadow:none !important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  html body a.btn.btn-primary[href="learning-environments.html"],
+  html body a[data-page-link="learning"][href="learning-environments.html"],
+  html body .hero-link,
+  html body .form-actions button.btn:not(:disabled){
+    transition:none !important;
+  }
+}
+
+
+/* August 4, 2026 — Version 41 unified interaction system. */
+/* Primary call-to-action buttons: black at rest, soft lift and shadow on hover. */
+html body .explore-environments-button,
+html body .environment-button,
+html body .form-actions .btn{
+  cursor:pointer !important;
+  background:#111 !important;
+  color:#fff !important;
+  border-color:#111 !important;
+  transform:translateY(0) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease !important;
+}
+
+html body .explore-environments-button:hover,
+html body .explore-environments-button:focus-visible,
+html body .environment-button:hover,
+html body .environment-button:focus-visible,
+html body .form-actions .btn:hover,
+html body .form-actions .btn:focus-visible{
+  transform:translateY(-3px) !important;
+  box-shadow:0 7px 16px rgba(0,0,0,.13) !important;
+}
+
+/* Preserve the consultation submit button's existing dark-gray hover feedback. */
+html body .form-actions .btn:hover,
+html body .form-actions .btn:focus-visible{
+  background:#333 !important;
+}
+
+html body .explore-environments-button:active,
+html body .environment-button:active,
+html body .form-actions .btn:active{
+  transform:translateY(-1px) !important;
+  box-shadow:0 3px 8px rgba(0,0,0,.1) !important;
+}
+
+/* Hero image: gentler movement than buttons, with no color change. */
+html body .hero-link{
+  cursor:pointer !important;
+  transform:translateY(0) !important;
+  transition:transform .2s ease, box-shadow .2s ease !important;
+}
+
+html body .hero-link:hover,
+html body .hero-link:focus-visible{
+  transform:translateY(-2px) !important;
+  box-shadow:0 6px 14px rgba(0,0,0,.10) !important;
+}
+
+html body .hero-link:active{
+  transform:translateY(-1px) !important;
+  box-shadow:0 3px 7px rgba(0,0,0,.08) !important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  html body .explore-environments-button,
+  html body .environment-button,
+  html body .form-actions .btn,
+  html body .hero-link{
+    transition:none !important;
+  }
+}
+
+
+/* August 5, 2026 — final shared header system for every Meridian page. */
+html body header.site-header,
+html body header.page-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:20 !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+  background:rgba(255,255,255,.97) !important;
+  border-bottom:1px solid var(--line,#e5e5e5) !important;
+  backdrop-filter:blur(10px) !important;
+}
+html body header.site-header > .header-inner,
+html body header.page-header > .header-inner{
+  width:min(1180px,calc(100% - 64px)) !important;
+  max-width:1180px !important;
+  min-height:76px !important;
+  margin:0 auto !important;
+  padding:18px 0 !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:28px !important;
+}
+html body header.site-header .brand,
+html body header.page-header .brand{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:#111820 !important;
+  text-decoration:none !important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+  font-size:1.06rem !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  letter-spacing:.115em !important;
+  white-space:nowrap !important;
+}
+html body header.site-header .brand img,
+html body header.page-header .brand img{
+  display:block !important;
+  width:1.25em !important;
+  height:1.25em !important;
+  object-fit:contain !important;
+  filter:contrast(1.12) !important;
+}
+html body header.site-header .nav-links,
+html body header.page-header .nav-links{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:30px !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  flex-wrap:nowrap !important;
+}
+html body header.site-header .nav-links a,
+html body header.page-header .nav-links a{
+  display:inline-block !important;
+  padding:0 !important;
+  color:#202830 !important;
+  text-decoration:none !important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+  font-size:.98rem !important;
+  font-weight:600 !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+}
+html body header.site-header .nav-links a:hover,
+html body header.site-header .nav-links a:focus-visible,
+html body header.page-header .nav-links a:hover,
+html body header.page-header .nav-links a:focus-visible{
+  text-decoration:underline !important;
+  text-underline-offset:6px !important;
+}
+html body header.site-header .nav-links a[aria-current="page"],
+html body header.page-header .nav-links a[aria-current="page"]{
+  text-decoration:underline !important;
+  text-underline-offset:6px !important;
+}
+html body .nav-label-mobile{display:none !important;}
+html body .nav-label-full{display:inline !important;}
+@media(max-width:700px){
+  html body header.site-header > .header-inner,
+  html body header.page-header > .header-inner{
+    width:calc(100% - 32px) !important;
+    min-height:0 !important;
+    padding:16px 0 !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:14px !important;
+  }
+  html body header.site-header .brand,
+  html body header.page-header .brand{font-size:1.06rem !important;}
+  html body header.site-header .nav-links,
+  html body header.page-header .nav-links{
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,.62fr) minmax(0,1.75fr) minmax(0,1fr) !important;
+    gap:6px !important;
+  }
+  html body header.site-header .nav-links a,
+  html body header.page-header .nav-links a{
+    font-size:clamp(.72rem,2.7vw,.86rem) !important;
+    text-align:center !important;
+  }
+  html body header.site-header .nav-links a:first-child,
+  html body header.page-header .nav-links a:first-child{text-align:left !important;}
+  html body header.site-header .nav-links a:last-child,
+  html body header.page-header .nav-links a:last-child{text-align:right !important;}
+  html body .nav-label-full{display:none !important;}
+  html body .nav-label-mobile{display:inline !important;}
+}
