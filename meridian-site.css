@@ -89,6 +89,9 @@ h2 {
   flex:0 0 1.4em;
   object-fit:contain;
   display:block;
+  transform:rotate(0deg) scale(1);
+  transform-origin:center;
+  transition:transform .18s ease;
 }
 
 .nav-links {
@@ -672,10 +675,16 @@ footer,
 
   .nav-links {
     width:100%;
-    justify-content:flex-start;
-    flex-wrap:wrap;
-    gap:10px 18px;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:0;
   }
+
+  .nav-links .nav-home { display:none; }
+  .nav-links .nav-about { grid-column:1; justify-self:start; }
+  .nav-links .nav-learning { grid-column:2; justify-self:center; }
+  .nav-links .nav-consult { grid-column:3; justify-self:end; }
 
   .nav-label-full { display:none; }
   .nav-label-mobile { display:inline; }
@@ -753,9 +762,21 @@ footer,
   filter:drop-shadow(0 5px 6px rgba(0,0,0,.12));
 }
 
+.site-header .brand:hover img,
+.site-header .brand:focus-visible img,
+.page-header .brand:hover img,
+.page-header .brand:focus-visible img {
+  transform:rotate(-7deg) scale(1.07);
+}
+
 .site-header .brand:active,
 .page-header .brand:active {
   transform:translateY(-1px);
+}
+
+.site-header .brand:active img,
+.page-header .brand:active img {
+  transform:rotate(7deg) scale(1.10);
 }
 
 /* Primary navigation links */
@@ -892,6 +913,8 @@ footer,
 @media (prefers-reduced-motion: reduce) {
   .site-header .brand,
   .page-header .brand,
+  .site-header .brand img,
+  .page-header .brand img,
   .site-header .nav-links a,
   .page-header .nav-links a,
   .explore-environments-button,
